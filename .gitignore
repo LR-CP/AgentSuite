@@ -4,7 +4,6 @@ venv/
 *.csv
 *.docx
 *.xlsx
-*.txt
 *copy*
 *BACKUP*
 *OLD*

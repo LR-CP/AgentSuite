@@ -1,0 +1,20 @@
+{
+  "chat_agent": {
+    "type": "ChatAgent",
+    "name": "Chat Agent",
+    "description": "Simple LLM to answer questions",
+    "settings": {
+      "model_name": "llama3.2",
+      "base_url": "http://localhost:11434"
+    }
+  },
+  "summarize_agent": {
+    "type": "SummarizeDocAgent",
+    "name": "Summarize Doc Agent",
+    "description": "Summarizes uploaded documents",
+    "settings": {
+      "model_name": "llama3.2",
+      "base_url": "http://localhost:11434"
+    }
+  }
+}

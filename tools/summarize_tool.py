@@ -3,7 +3,7 @@ import tempfile
 from core.base import BaseTool
 from tools.document_utils import load_document, summarize_text
 
-class SummarizationTool(BaseTool):
+class SummarizeTool(BaseTool):
     """
     A tool to summarize documents.
     """

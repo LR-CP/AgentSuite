@@ -1,8 +1,8 @@
 from core.base import BaseAgent
 from agents.chat_agent import ChatAgent
-from agents.summarize_doc_agent import SummarizeDocAgent
+from agents.summarize_agent import SummarizeDocAgent
 from tools.llm_chat_tool import LLMChat
-from tools.summarization_tool import SummarizationTool
+from tools.summarize_tool import SummarizeTool
 
 class AgentFactory:
     """
@@ -41,7 +41,7 @@ class AgentFactory:
             model_name = settings.get('model_name', 'llama3.2')
             base_url = settings.get('base_url', 'http://localhost:11434')
             
-            summarization_tool = SummarizationTool(
+            summarization_tool = SummarizeTool(
                 name="Summarization Tool",
                 description="Summarizes documents",
                 model_name=model_name,

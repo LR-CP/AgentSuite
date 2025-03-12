@@ -1,15 +1,15 @@
 from core.base import BaseAgent
-from tools.summarization_tool import SummarizationTool
+from tools.summarize_tool import SummarizeTool
 
 class SummarizeDocAgent(BaseAgent):
     """
-    An agent that uses a SummarizationTool to summarize uploaded documents.
+    An agent that uses a SummarizeDocumentTool to summarize uploaded documents.
     """
     def __init__(
         self,
         name: str,
         description: str,
-        summarization_tool: SummarizationTool,
+        summarization_tool: SummarizeTool,
         settings: dict = None,
     ):
         super().__init__(name, description, settings)

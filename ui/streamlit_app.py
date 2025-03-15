@@ -1,8 +1,8 @@
+import os
 import streamlit as st
 import tkinter as tk
 import json
 from tkinter import filedialog
-from core.manager import AgentManager
 from factory.agent_factory import AgentFactory
 from factory.agent_storage import save_agents, load_agents
 
@@ -268,28 +268,55 @@ def save_conversation(title):
         "convo": conversation
     }
 
-    with open(f"{title}.json", "w") as f:
+    with open(f"conversations/{title}.json", "w") as f:
         json.dump(conversation_data, f, indent=2)
 
-def load_conversation(title):
-    with open(f"{title}.json", "r") as f:
+def load_conversation(agent, title):
+    with open(f"conversations/{title}.json", "r") as f:
         conversation_data = json.load(f)
-    for item in conversation_data[title]["convo"]:
+    
+    for item in conversation_data[title]["convo"]: # Load convo into display
         st.session_state.chat_history.append({"role": "user", "content": item})
+    
+    formatted_messages = []
+    for i, message in enumerate(conversation_data[title]["convo"]): # Load convo into context of llm
+        role = "user" if i % 2 == 0 else "assistant"
+        formatted_messages.append({"role": role, "content": message})
+    
+    response = agent.run(f"These were our last conversations. Reply 'GOT IT' if you received this: {formatted_messages}")
+    print(response)
 
 def handle_chat_agent(agent):
     st.info("Chat with the LLM below:")
-    title = st.text_input(label="Conversation_Name:")
+    
+    # Get list of conversation files from the conversations folder
+    conversation_files = []
+    conversations_dir = "conversations"  # Change this to your folder path
+    
+    # Check if the directory exists
+    if os.path.exists(conversations_dir) and os.path.isdir(conversations_dir):
+        # List all JSON files in the directory
+        conversation_files = [f for f in os.listdir(conversations_dir) if f.endswith('.json')]
+    
+    # Create dropdown for file selection
+    selected_file = st.selectbox(
+        "Select a saved conversation:",
+        [""] + conversation_files,  # Empty option at the beginning
+        index=0  # Default to empty selection
+    )
 
-    # Save button
+    # Text input for new conversation name
+    title = st.text_input(label="Conversation Name:", value=selected_file.replace('.json', '') if selected_file else "")
+    
+    # Load button
+    if st.button("Load Conversation"):
+        load_conversation(agent, title)
+        st.success("Conversation loaded successfully!")
+    
+
     if st.button("💾 Save Conversation"):
         save_conversation(title)
         st.success("Conversation saved successfully!")
-
-    # Load button
-    if st.button("Load Conversation"):
-        load_conversation(title)
-        st.success("Conversation loaded successfully!")
 
     # User input field
     user_input = st.chat_input("Type your message here...")

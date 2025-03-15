@@ -1,8 +1,10 @@
 from core.base import BaseAgent
 from agents.chat_agent import ChatAgent
 from agents.summarize_agent import SummarizeDocAgent
+from agents.codespace_guru import CodespaceGuru
 from tools.llm_chat_tool import LLMChat
 from tools.summarize_tool import SummarizeTool
+from tools.codespace_tool import CodespaceTool
 
 class AgentFactory:
     """
@@ -49,6 +51,20 @@ class AgentFactory:
             )
             
             return SummarizeDocAgent(name, description, summarization_tool, settings)
+        
+        # Add new agent types/tools here
+        elif agent_type == "CodespaceGuru":
+            model_name = settings.get('model_name', 'llama3.2')
+            base_url = settings.get('base_url', 'http://localhost:11434')
+            
+            codespace_tool = CodespaceTool(
+                name="Codespace Guru",
+                description="Learns codespaces",
+                model_name=model_name,
+                base_url=base_url
+            )
+            
+            return CodespaceGuru(name, description, codespace_tool, settings)
             
         else:
             raise ValueError(f"Unknown agent type: {agent_type}")
